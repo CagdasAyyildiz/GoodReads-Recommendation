@@ -31,9 +31,6 @@ public class Book {
         this.id = id;
     }
 
-    public void setRating_count(int rating_count) {
-        this.rating_count = rating_count;
-    }
 
     public void setTitle(String title) {
         this.title = title;
