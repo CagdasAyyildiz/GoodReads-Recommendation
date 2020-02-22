@@ -1,18 +1,20 @@
-import com.sun.tools.doclint.Env;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 
 class DataRet {
@@ -65,7 +67,6 @@ class DataRet {
         doc.getDocumentElement().normalize();
         NodeList books = doc.getElementsByTagName("book");
         for (int i = 0; i < books.getLength(); i++) {
-            LinkedList<String> genres = new LinkedList<>();
             try {
                 title = ((Element) books.item(i)).getAttribute("title");
                 NodeList idd = ((Element) books.item(i)).getElementsByTagName("id");
@@ -80,7 +81,7 @@ class DataRet {
                 int editionId = Integer.parseInt(edition_id.item(0).getTextContent());
                 NodeList genress = ((Element) books.item(i)).getElementsByTagName("genres");
                 genre = genress.item(0).getTextContent();
-                genres.addAll(Arrays.asList(genre.split(",")));
+                LinkedList<String> genres = new LinkedList<>(Arrays.asList(genre.split(",")));
                 Book book = new Book();
                 book.setGenres(genres);
                 book.setId(id);
