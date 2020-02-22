@@ -192,9 +192,9 @@ class Documenter {
             book.appendChild(author);
             book.appendChild(id);
             genres = doc.createElement("genres");
-            String bookGenres = null;
+            String bookGenres = "";
             for (String s : temp.getGenres()) {
-                bookGenres += s +", ";
+                bookGenres = bookGenres.concat(s + ", ");
             }
             bookGenres = bookGenres.substring(4, bookGenres.length()-1);
             genres.appendChild(doc.createTextNode(bookGenres));
@@ -212,43 +212,21 @@ class Documenter {
         // Output to console for testing
     }
 
-
-    public LinkedList<Book> readAllBooks() throws ParserConfigurationException, IOException, SAXException {
-        Set<Integer> bookSet = new HashSet<>();
-        DataRet dataRet = new DataRet();
-        LinkedList<Book> book_list = new LinkedList<>();
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.newDocument();
+    public void mergeAllBooks() throws ParserConfigurationException, SAXException, IOException {
+        DataRetriever dataRet = new DataRetriever();
+        LinkedList<Book> book_list;
         LinkedList<Book> all_books = new LinkedList<>();
-        for (int k = 0; k < 2; k++) {
-            book_list = dataRet.readBooksXML("all_books" + k + ".xml");
-            /*for (Book temp : book_list) {
-                bookSet.add(temp.getEditionId());
-            }*/
+        for (int k = 0; k < 3; k++) {
+            book_list = dataRet.readBooksFromXML("all_books" + k + ".xml");
             all_books.addAll(book_list);
         }
-        return all_books;
-        //return book_list;
+        writeAllBooks(all_books);
+    }
 
-        /*int start = 12000,stop = 12400;
-        for (int i = 0; i < 15; i++) {
-            for (int j = start; j < stop; j++) {
-                Book book;
-                try {
-                    book = parseBook(dataRet.fetchBookData(j));
-                    if (!(bookSet.add(book.getEditionId())) || (book.getRating_count() < 5000)) {
-                        continue;
-                    }
-                book.setGenres(dataRet.fetchBookGenres(book));
-                } catch (NullPointerException ignored) {continue;}
-                //System.out.println(book.getId() + " " + book.getEditionId());
-                book_list.add(book);
-            }
-            //writeAllBooks(book_list);
-            //start = stop;
-            //stop += 400;
-        }*/
+
+    public LinkedList<Book> readAllBooks() throws ParserConfigurationException, IOException, SAXException {
+        DataRetriever dataRet = new DataRetriever();
+        return new LinkedList<>(dataRet.readBooksFromXML("all_books.xml"));
     }
 
     public void writeAllBooks(LinkedList<Book> book_list) throws ParserConfigurationException {
@@ -302,7 +280,7 @@ class Documenter {
         try {
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("all_books2.xml"));
+            StreamResult result = new StreamResult(new File("all_books.xml"));
             transformer.transform(source, result);
             // Output to console for testing
         } catch (TransformerException e) {

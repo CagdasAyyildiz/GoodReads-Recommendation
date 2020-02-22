@@ -15,12 +15,12 @@ public class Main {
         LinkedList<Book> all_books;
         Map<String, Integer> frequency;
         Documenter documenter = new Documenter();
-        DataRet dataRet = new DataRet();
+        DataRetriever dataRet = new DataRetriever() ;
         //int user_id = documenter.parseUserId();
-        LinkedList<Book> user_books = new LinkedList<>();
+        LinkedList<Book> user_books;
        //onlineMode(documenter, dataRet, 8783538,user_books );
-        user_books = dataRet.readBooksXML(user + ".xml");
-        String info = "abc";
+        user_books = dataRet.readBooksFromXML(user + ".xml");
+        String info;
 
         frequency = documenter.findFrequency(user_books);
 
@@ -34,8 +34,7 @@ public class Main {
             sortedGenreMap.put(aa.getKey(), aa.getValue());
         }
 
-
-
+        documenter.mergeAllBooks();
         all_books = documenter.readAllBooks();
 
         cleanBooks(all_books,user_books);
@@ -93,10 +92,7 @@ public class Main {
         Files.write(file1, Collections.singletonList(book_url), StandardCharsets.UTF_8);
         Path file2 = Paths.get("images\\images.txt");
         Files.write(file2, Collections.singletonList(image_url), StandardCharsets.UTF_8);
-        //PrintWriter writer2 = new PrintWriter("images\\images.txt","UTF-8");
 
-        //writer1.write(book_url);
-        //writer2.write(image_url);
         info = "Frequency of tag: \n";
         count = 0;
         for (String ss : sortedGenreMap.keySet()) {
@@ -126,7 +122,7 @@ public class Main {
    }
 
 
-    static void onlineMode(Documenter documenter,DataRet dataRet,int user_id, LinkedList<Book> user_books) throws IOException, ParserConfigurationException, SAXException {
+    static void onlineMode(Documenter documenter,DataRetriever dataRet,int user_id, LinkedList<Book> user_books) throws IOException, ParserConfigurationException, SAXException {
         documenter.parseUserReadShelf(dataRet.fetchReadBooks(user_id),user_books,user_id);
 
         user_books.forEach(book -> {
