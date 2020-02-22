@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile 'com.google.apis:google-api-services-oauth2:v1-rev20190313-1.30.8'
+    compile 'com.google.api-client:google-api-client:1.30.5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
