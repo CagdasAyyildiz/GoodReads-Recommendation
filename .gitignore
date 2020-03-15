@@ -8,3 +8,4 @@ gradle
 /.idea/
 *.iml
 *.ipr
+.idea/gradle.xml
